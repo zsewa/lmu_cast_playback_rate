@@ -8,3 +8,5 @@ Instructions on how to install userscripts are availible [here](https://openuser
 
 # How does this work?
 This userscript adds a menu in your userscript manager (e.g. Tampermonkey) that allows to change the playback rate for videos on LMU Cast.
+
+![Demo](user_menu_teaser.png)
