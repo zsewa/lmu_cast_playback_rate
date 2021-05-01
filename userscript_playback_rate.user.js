@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name            LMU Cast Custom Playback Rate
 // @namespace       https://github.com/zsewa
-// @version         0.1
+// @version         0.2
 // @description     Set the playback rate for LMU Cast videos
 // @author          Zeno Sewald
 
@@ -12,14 +12,18 @@
 // @grant GM_registerMenuCommand
 // ==/UserScript==
 
+function savePreferredPlaybackRate(factor) {
+    // save last known playback rate
+    GM_setValue('lmu_cast_playback_rate', factor)
+    
+    console.log("Set preferred playback rate to " + factor);
+}
+
 function setPlaybackRateTo(factor) {
     let video_element = document.getElementsByTagName("video")[0];
     video_element.playbackRate = factor;
 
     console.log("Changed playback rate to " + factor);
-
-    // save last known playback rate
-    GM_setValue('lmu_cast_playback_rate', factor)
 }
 
 function setToSavedPlaybackRate() {
@@ -39,7 +43,7 @@ function askForCustomRate() {
     'use strict';
 
     // set playback rate afer a short delay
-    let DELAY = 2500; // delay in ms
+    const DELAY = 2500; // delay in ms
     window.setTimeout(setToSavedPlaybackRate, DELAY);
 
     // register menu entries
@@ -61,5 +65,9 @@ function askForCustomRate() {
     });
     GM_registerMenuCommand('Playback x2', function() {
         setPlaybackRateTo(2);
+    });
+    GM_registerMenuCommand('Set preferred playback rate', function() {
+        let playback_rate = askForCustomRate();
+        savePreferredPlaybackRate(playback_rate);
     });
 })();
