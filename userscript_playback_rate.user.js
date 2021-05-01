@@ -12,6 +12,8 @@
 // @grant GM_registerMenuCommand
 // ==/UserScript==
 
+const DEFAULT_PLAYBACK_RATE = 1;
+
 function savePreferredPlaybackRate(factor) {
     // save last known playback rate
     GM_setValue('lmu_cast_playback_rate', factor)
@@ -28,14 +30,13 @@ function setPlaybackRateTo(factor) {
 
 function setToSavedPlaybackRate() {
     // get default or saved playback rate value
-    const DEFAULT_PLAYBACK_RATE = 1;
     let playback_rate = GM_getValue('lmu_cast_playback_rate', DEFAULT_PLAYBACK_RATE);
 
     setPlaybackRateTo(playback_rate);
 }
 
 function askForCustomRate() {
-    let playback_rate = prompt("Playback rate", "1");
+    let playback_rate = prompt("Playback rate", GM_getValue('lmu_cast_playback_rate', DEFAULT_PLAYBACK_RATE));
     return playback_rate;
 }
 
@@ -47,7 +48,7 @@ function askForCustomRate() {
     window.setTimeout(setToSavedPlaybackRate, DELAY);
 
     // register menu entries
-    GM_registerMenuCommand('Set custom playback rate', function() {
+    GM_registerMenuCommand('Custom playback rate', function() {
         let playback_rate = askForCustomRate();
         setPlaybackRateTo(playback_rate);
     });
@@ -66,7 +67,7 @@ function askForCustomRate() {
     GM_registerMenuCommand('Playback x2', function() {
         setPlaybackRateTo(2);
     });
-    GM_registerMenuCommand('Set preferred playback rate', function() {
+    GM_registerMenuCommand('Set default playback rate', function() {
         let playback_rate = askForCustomRate();
         savePreferredPlaybackRate(playback_rate);
         setToSavedPlaybackRate();
