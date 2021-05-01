@@ -21,8 +21,12 @@ function savePreferredPlaybackRate(factor) {
     console.log("Set preferred playback rate to " + factor);
 }
 
+function getVideoElement() {
+    return document.getElementsByTagName("video")[0];
+}
+
 function setPlaybackRateTo(factor) {
-    let video_element = document.getElementsByTagName("video")[0];
+    let video_element = getVideoElement();
     video_element.playbackRate = factor;
 
     console.log("Changed playback rate to " + factor);
@@ -35,8 +39,13 @@ function setToSavedPlaybackRate() {
     setPlaybackRateTo(playback_rate);
 }
 
-function askForCustomRate() {
-    let playback_rate = prompt("Playback rate", GM_getValue('lmu_cast_playback_rate', DEFAULT_PLAYBACK_RATE));
+function currentPlaybackRate() {
+    let video_element = getVideoElement();
+    return video_element.playbackRate;
+}
+
+function askForCustomRate(value) {
+    let playback_rate = prompt("Playback rate", value);
     return playback_rate;
 }
 
@@ -49,7 +58,7 @@ function askForCustomRate() {
 
     // register menu entries
     GM_registerMenuCommand('Custom playback rate', function() {
-        let playback_rate = askForCustomRate();
+        let playback_rate = askForCustomRate(currentPlaybackRate());
         setPlaybackRateTo(playback_rate);
     });
     GM_registerMenuCommand('Playback x0.75', function() {
@@ -68,7 +77,7 @@ function askForCustomRate() {
         setPlaybackRateTo(2);
     });
     GM_registerMenuCommand('Set default playback rate', function() {
-        let playback_rate = askForCustomRate();
+        let playback_rate = askForCustomRate(GM_getValue('lmu_cast_playback_rate', DEFAULT_PLAYBACK_RATE));
         savePreferredPlaybackRate(playback_rate);
         setToSavedPlaybackRate();
     });
