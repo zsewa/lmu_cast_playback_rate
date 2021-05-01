@@ -69,5 +69,6 @@ function askForCustomRate() {
     GM_registerMenuCommand('Set preferred playback rate', function() {
         let playback_rate = askForCustomRate();
         savePreferredPlaybackRate(playback_rate);
+        setToSavedPlaybackRate();
     });
 })();
